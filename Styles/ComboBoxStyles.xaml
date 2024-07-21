@@ -1,0 +1,146 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Define Colors as static resources -->
+    <SolidColorBrush x:Key="ComboBackgroundColor" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="GlyphColor" Color="Black"/>
+    <SolidColorBrush x:Key="GlyphBackgroundColor" Color="#cacccf"/>
+    <SolidColorBrush x:Key="DropDownBorderBrushColor" Color="#0d272e"/>
+    <SolidColorBrush x:Key="DropDownBackgroundColor" Color="WhiteSmoke"/>
+
+    <!-- Define controltemplates beforehand as staticresources for different combobox parts -->
+    <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+
+            <Border x:Name="Border"
+                Grid.ColumnSpan="2"
+                CornerRadius="2"
+                BorderThickness="1"
+                Background="{StaticResource GlyphBackgroundColor}"
+                BorderBrush="{StaticResource DropDownBorderBrushColor}"/>
+
+            <Border Grid.Column="0"
+                CornerRadius="2,2,2,2"
+                Margin="1"
+                Background="{StaticResource ComboBackgroundColor}"/>
+
+            <Path x:Name="Arrow"
+              Grid.Column="1"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Data="M 0 0 L 4 4 L 8 0 Z"
+              Fill="{StaticResource GlyphColor}"/>
+
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+        <Border x:Name="PART_ContentHost"
+              Focusable="False"
+              Background="{TemplateBinding Background}" />
+    </ControlTemplate>
+
+    <!-- Define style for the whole combobox wich overrides the global default style -->
+    <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+
+        <Setter Property="Width" Value="250" />
+        <Setter Property="Height" Value="25" />
+
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="Times New Roman"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <!-- Style of the ToggleButton part -->
+                        <ToggleButton x:Name="ToggleButton"
+                                    Template="{StaticResource ComboBoxToggleButton}"
+                                    Grid.Column="2"
+                                    Focusable="false"
+                                    ClickMode="Press"
+                                    IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        <!-- Style of the presented text in the togglebutton -->
+                        <ContentPresenter x:Name="ContentSite"
+                                        Content="{TemplateBinding SelectionBoxItem}"
+                                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                        ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                        Margin="3,3,23,3"
+                                        VerticalAlignment="Stretch"
+                                        HorizontalAlignment="Left"/>
+                        <!-- Style of the dropdown list -->
+                        <Popup x:Name="Popup"
+                             Placement="Bottom"
+                             IsOpen="{TemplateBinding IsDropDownOpen}"
+                             AllowsTransparency="True"
+                             Focusable="False"
+                             PopupAnimation="Slide">
+                            <Grid x:Name="DropDown"
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border x:Name="DropDownBorder" BorderThickness="1"
+                                    BorderBrush="{StaticResource DropDownBorderBrushColor}"
+                                    Background="{StaticResource DropDownBackgroundColor }">
+                                </Border>
+
+                                <ScrollViewer Margin="2,3,2,3">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+
+                    </Grid>
+                    <!-- Style triggers -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
+                        </Trigger>
+
+                        <Trigger Property="IsGrouping" Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                        </Trigger>
+
+                        <Trigger SourceName="Popup" Property="AllowsTransparency" Value="true">
+                            <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="4" />
+                            <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Border x:Name="Border"
+                    Padding="2"
+                    Background="{StaticResource ComboBackgroundColor}">
+
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

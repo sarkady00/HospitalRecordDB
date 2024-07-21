@@ -1,0 +1,162 @@
+﻿<Window x:Class="HospitalRecord.View.AddPatientWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HospitalRecord.View"
+        mc:Ignorable="d"
+        Title="Beteg adminisztráció" Height="530" Width="700" MinHeight="510" MinWidth="700" ResizeMode="NoResize" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Border Padding="15" Background="DarkSlateGray">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0"
+                   Content="Beteg adminisztráció"  
+                   Margin="0,-15,0,0" 
+                   Style="{StaticResource TitleLabel2}"/>
+
+            <Border Grid.Row="1" Padding="15" Background="WhiteSmoke">
+                <Grid Width="500" VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" 
+                           Content="Művelet: "/>
+                    <ComboBox x:Name="ManagePatientCombo" 
+                              Grid.Row="0" Grid.Column="1"
+                              Width="150"  
+                              SelectedIndex="0" 
+                              SelectedValuePath="Content" SelectionChanged="AddRemovePatientComboBox_SelectionChanged">
+                        <ComboBoxItem Content="Felvétel"/>
+                        <ComboBoxItem Content="Hazaenged"/>
+                    </ComboBox>
+
+                    <!-- Register Patient -->
+                    <Grid x:Name="registerGrid" Width="500" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Hidden">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left Column -->
+                        <Label Content="Név: " 
+                               Grid.Row="0" Grid.Column="0"/>
+                        <Label Content="Születési Dátum: " 
+                               Grid.Row="1" Grid.Column="0"/>
+                        <Label Content="Szig. szám: " 
+                               Grid.Row="2" Grid.Column="0"/>
+                        <Label Content="Lakcím: " 
+                               Grid.Row="3" Grid.Column="0"/>
+                        <Label Content="Neme: " 
+                               Grid.Row="4" Grid.Column="0"/>
+                        <Label Content="Taj szám: " 
+                               Grid.Row="5" Grid.Column="0"/>
+                        <Label Content="Fekvő/Járó: " 
+                               Grid.Row="6" Grid.Column="0"/>
+                        <Label Name="RoomLabel" 
+                               Content="Szobaszám: " 
+                               Grid.Row="7" Grid.Column="0"/>
+
+                        <!-- Right Column -->
+                        <TextBox x:Name="NameField" 
+                                 Grid.Row="0" Grid.Column="1" 
+                                 Tag="* Max 30 karakter."
+                                 Text="{Binding Name, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                                 />
+                        <TextBox x:Name="BDateField" 
+                                 Grid.Row="1" Grid.Column="1" 
+                                 Tag="* ÉÉÉÉ.HH.NN"
+                                 Text="{Binding BirthDate, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <TextBox x:Name="IDnumbField" 
+                                 Grid.Row="2" Grid.Column="1" 
+                                 Tag="* 123456AB"
+                                 Text="{Binding IDnumb, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <TextBox x:Name="AddressField" 
+                                 Grid.Row="3" Grid.Column="1"
+                                 Tag="* Max 50 karakter."
+                                 Text="{Binding Address, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <ComboBox Grid.Row="4" Grid.Column="1"
+                                  ItemsSource="{Binding SexEnumArray}"  
+                                  SelectedIndex="0"
+                                  Text="{Binding Sex}"/>
+                        <TextBox x:Name="HealthCareNumbField" 
+                                 Grid.Row="5" Grid.Column="1" 
+                                 Tag="* 123 456 789"
+                                 Text="{Binding HealthCareNumber, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <ComboBox x:Name="TypeCombo" 
+                                  Grid.Row="6" Grid.Column="1"
+                                  ItemsSource="{Binding TypeEnumArray}" 
+                                  SelectedIndex="0" 
+                                  Text="{Binding Type}" 
+                                  SelectionChanged="TypeCombo_SelectionChanged"/>
+                        <TextBox x:Name="RoomField" 
+                                 Grid.Row="7" Grid.Column="1"
+                                 Text="{Binding Room}"/>
+
+                        <StackPanel Grid.Row="8" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,15,0,0">
+                            <Label Content="A *-al megjelölt mezők kitöltése kötelező!" FontSize="12"/>
+                            <Button Content="Felvesz" 
+                                    FontSize="16"
+                                    Margin="0,15,0,0"
+                                    Command="{Binding AddPatientCommand}" 
+                                    Click="Register_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!--Remove Patient-->
+                    <Grid x:Name="removeGrid" Width="500" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Center" Visibility="Hidden">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left Column -->
+                        <Label Content="Szig. Szám: " 
+                               Grid.Row="0" Grid.Column="0"/>
+
+                        <!-- Right Column -->
+                        <TextBox x:Name="IDField" 
+                                 Grid.Row="0" Grid.Column="1"
+                                 Tag="123456AB"
+                                 Text="{Binding IDnumb}"/>
+
+                        <Button Grid.Row="1" Grid.ColumnSpan="2" 
+                                Content="Hazaenged"
+                                FontSize="16"
+                                Command="{Binding RemovePatientCommand}" 
+                                Click="RemovePatient_Click"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+
+
+</Window>

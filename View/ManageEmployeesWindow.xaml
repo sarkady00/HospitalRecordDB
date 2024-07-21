@@ -1,0 +1,192 @@
+﻿<Window x:Class="HospitalRecord.View.ManageEmployeesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HospitalRecord.View"
+        xmlns:util="clr-namespace:HospitalRecord.Wpf.Util"
+        mc:Ignorable="d"
+        Title="Alkalmazott adminisztráció" Height="730" Width="1040" MinHeight="730" MinWidth="1040" MaxWidth="1040" ResizeMode="CanResizeWithGrip" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Border Padding="15" Background="DarkSlateGray">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" 
+                   Content="Dolgozó adminisztráció"
+                   Margin="0,-15,0,0"
+                   Style="{StaticResource TitleLabel2}"/>
+
+            <Border Grid.Row="1" Padding="15" Background="WhiteSmoke">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="410"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+
+                    <Label Grid.Row="0" Grid.Column="0"
+                           Content="Művelet: "/>
+
+                    <ComboBox x:Name="addRemoveCombo" 
+                              Grid.Row="0" Grid.Column="1" 
+                              Width="100" 
+                              SelectedIndex="0" 
+                              SelectionChanged="addRemoveCombo_SelectionChanged">
+                        <ComboBoxItem Content="Felvétel"/>
+                        <ComboBoxItem Content="Törlés"/>
+                    </ComboBox>
+
+                    <!-- Register Employee Layout -->
+                    <Grid x:Name="gridAdd" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Width="500" Visibility="Hidden">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left Column -->
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Content="Név: " />
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Content="Születési Dátum: "/>
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Content="Szig. szám: "/>
+                        <Label Grid.Row="3" Grid.Column="0"
+                               Content="Lakcim: "/>
+                        <Label Grid.Row="4" Grid.Column="0"
+                               Content="Neme: "/>
+                        <Label Grid.Row="5" Grid.Column="0"
+                               Content="Beosztás: "/>
+                        <Label Grid.Row="6" Grid.Column="0"
+                               Content="Fizetés: "/>
+                        <Label x:Name="SpecialtyLabel"
+                               Grid.Row="7" Grid.Column="0"
+                               Content="Szakirány: "/>
+                        <Label x:Name="PatientsLabel"
+                               Grid.Row="8" Grid.Column="0"
+                               Content="Betegek száma: "/>
+
+
+                        <!-- Right Column -->
+                        <TextBox x:Name="NameField" 
+                                 Grid.Row="0" Grid.Column="1" 
+                                 Tag="* Max 30 karakter."
+                                 Text="{Binding Name, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <TextBox x:Name="BDateField" 
+                                 Grid.Row="1" Grid.Column="1" 
+                                 Tag="* ÉÉÉÉ/HH/NN"
+                                 Text="{Binding BirthDate, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <TextBox x:Name="IDnumbField" 
+                                 Grid.Row="2" Grid.Column="1" 
+                                 Tag="* 123456AB"
+                                 Text="{Binding IDnumb, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <TextBox x:Name="AddressField" 
+                                 Grid.Row="3" Grid.Column="1" 
+                                 Tag="* Max 50 karakter."
+                                 Text="{Binding Address, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <ComboBox Grid.Row="4" Grid.Column="1"
+                                  ItemsSource="{Binding SexEnumArray}"  
+                                  SelectedIndex="0" 
+                                  Text="{Binding Sex}"/>
+                        <ComboBox x:Name="JobComboBox" 
+                                  Grid.Row="5" Grid.Column="1"
+                                  ItemsSource="{Binding JobEnumArray}"  
+                                  SelectedIndex="2" 
+                                  Text="{Binding Job}" 
+                                  SelectionChanged="JobComboBox_SelectionChanged"/>
+                        <TextBox x:Name="SalaryField" 
+                                 Grid.Row="6" Grid.Column="1"
+                                 Tag="*"
+                                 Text="{Binding Salary, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+                        <ComboBox x:Name="SpecialtyField" 
+                                  Grid.Row="7" Grid.Column="1"
+                                  ItemsSource="{Binding SpecialtyEnumArray}"  
+                                  SelectedIndex="0" 
+                                  Text="{Binding Specialty}"/>
+                        <TextBox x:Name="PatientsField" 
+                                 Grid.Row="8" Grid.Column="1" 
+                                 Text="{Binding PatientsNumb}"/>
+
+                        <StackPanel Grid.Row="9" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Label Content="A *-al megjelölt mezők kitöltése kötelező!" FontSize="12"/>
+
+                            <Button Content="Felvesz" 
+                                    FontSize="16"
+                                    Margin="0,15,0,0"
+                                    Command="{Binding AddEmployeeCommand}" 
+                                    Click="Add_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Remove Employee Layout -->
+                    <Grid x:Name="gridRemove" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" Width="500" VerticalAlignment="Top" Visibility="Hidden">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Left Column -->
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Content="Szig. szám: "/>
+
+                        <!-- Right Column -->
+                        <TextBox x:Name="IDField" 
+                                 Tag="123456AB"
+                                 Grid.Row="0" Grid.Column="1" 
+                                 Text="{Binding IDnumb}"/>
+
+                        <Button Grid.Row="1" Grid.ColumnSpan="2"
+                                Content="Töröl" 
+                                FontSize="16"
+                                Command="{Binding RemoveEmployeeCommand}" 
+                                Click="Fire_Click"/>
+                    </Grid>
+
+                    <!-- List of Employees -->
+                    <ListView Grid.Row="2" Grid.ColumnSpan="2" Name="EmployeeList" ItemsSource="{Binding Employees}" BorderBrush="#cdcdcd" Margin="0,0,0,0" Padding="0" IsSynchronizedWithCurrentItem="True" util:GridViewSort.AutoSort="True">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Width="100" Header="Beosztás" DisplayMemberBinding="{Binding Job}" util:GridViewSort.PropertyName="Job"/>
+                                <GridViewColumn Width="100" Header="Név" DisplayMemberBinding="{Binding Name}" util:GridViewSort.PropertyName="Name"/>
+                                <GridViewColumn Width="100" Header="Születési dátum" DisplayMemberBinding="{Binding BirthDate}" util:GridViewSort.PropertyName="BirthDate"/>
+                                <GridViewColumn Width="50" Header="Kor" DisplayMemberBinding="{Binding Age}" util:GridViewSort.PropertyName="Age"/>
+                                <GridViewColumn Width="100" Header="Szig. szám" DisplayMemberBinding="{Binding IDnumb}" util:GridViewSort.PropertyName="IDnumb"/>
+                                <GridViewColumn Width="150" Header="Lakcím" DisplayMemberBinding="{Binding Address}" util:GridViewSort.PropertyName="Address"/>
+                                <GridViewColumn Width="50" Header="Nem" DisplayMemberBinding="{Binding Sex}" util:GridViewSort.PropertyName="Sex"/>
+                                <GridViewColumn Width="100" Header="Szak" DisplayMemberBinding="{Binding Specialty}" util:GridViewSort.PropertyName="Specialty"/>
+                                <GridViewColumn Width="100" Header="Betegek száma" DisplayMemberBinding="{Binding PatientsNumb}" util:GridViewSort.PropertyName="PatientsNumb"/>
+                                <GridViewColumn Width="100" Header="Fizetés" DisplayMemberBinding="{Binding Salary}" util:GridViewSort.PropertyName="Salary"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
