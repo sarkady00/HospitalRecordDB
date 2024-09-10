@@ -1,15 +1,17 @@
 # HospitalRecordDB
 
- Készítette: Sarkadi Balázs Róbert
+ Author: Sarkadi Balázs Róbert
 
 
-# Rendszerkövetelmények az alkalmazás futtatásához: 
-.NET Framework 4.7.2 vagy újabb; Microsoft SQL server 2022 (Express)
+# Requirements to run the application: 
+.NET Framework 4.7.2 or newer; Microsoft SQL server 2022 (Express)
 
 
-# Rövid leírás:
+# Short description:
 
-Az alkalmazás kórházi nyílvántartás vezetésére szolgál, amelyben mind a betegek adatai mind a dolgozók adatai egy adatbázisban tárolódnak, így az alkalmazás bezárása után sem vesznek el. A program több adminisztrációs és biztonsági funkcióval is rendelkezik.
+This sowftware presenting a solution for manageing hospital records, with functions such as manage patients and worker at the same time (add, delete, edit with given criterias) whereas these datas are stored in a MySQL database. 
 
-# Futtatható állomány és telepítő
+The language of the UI is Hungarian, but the source is in English.
+
+# executable and installer location:
 /bin/Release
